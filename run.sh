@@ -1,5 +1,4 @@
 #!/bin/sh
-service tomcat7 start
 
 # link mounted source directory to opengrok
 ln -s /src $OPENGROK_INSTANCE_BASE/src
@@ -8,6 +7,9 @@ ln -s /src $OPENGROK_INSTANCE_BASE/src
 echo "** Running first-time indexing"
 cd /opengrok/bin
 ./OpenGrok index
+
+# start jsp container after indexing to avoid race between unpacking war and indexer completion
+service tomcat8 start
 
 # ... and we keep running the indexer to keep the container on
 echo "** Waiting for source updates..."
